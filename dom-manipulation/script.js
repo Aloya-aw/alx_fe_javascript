@@ -37,6 +37,7 @@ function addQuote() {
   }
 }
 
+
 newQuoteButton.addEventListener('click', showRandomQuote);
 addQuoteBtn.addEventListener('click', addQuote);
 
