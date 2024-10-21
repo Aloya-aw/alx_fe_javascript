@@ -5,6 +5,16 @@ const newQuoteTextInput = document.getElementById('newQuoteText');
 const newQuoteCategoryInput = document.getElementById('newQuoteCategory');
 const addQuoteBtn = document.getElementById('addQuoteBtn');
 
+newQuoteTextInput.type = 'text';
+newQuoteTextInput.placeholder = 'Enter a new quote';
+newQuoteCategoryInput.type = 'text';
+newQuoteCategoryInput.placeholder = 'Enter quote category';
+addQuoteBtn.textContent = 'Add Quote';
+
+addQuoteForm.appendChild(newQuoteTextInput);
+addQuoteForm.appendChild(newQuoteCategoryInput);
+addQuoteForm.appendChild(addQuoteBtn);
+quoteDisplay.appendChild(addQuoteForm);
 
 
 let quotes = [
