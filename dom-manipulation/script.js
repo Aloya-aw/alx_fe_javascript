@@ -41,6 +41,9 @@ function addQuote() {
     quotes.push({ text: newQuoteText, category: newQuoteCategory });
     newQuoteTextInput.value = '';
     newQuoteCategoryInput.value = '';
+    const newQuoteListItem = document.createElement('li');
+    newQuoteListItem.textContent = `${newQuoteText} - ${newQuoteCategory}`;
+    quoteDisplay.appendChild(newQuoteListItem);
     showRandomQuote();
   } else {
     alert('Please enter both quote text and category.');
