@@ -4,6 +4,8 @@ const addQuoteForm = document.getElementById('addQuoteForm');
 const newQuoteTextInput = document.getElementById('newQuoteText');
 const newQuoteCategoryInput = document.getElementById('newQuoteCategory');
 const addQuoteBtn = document.getElementById('addQuoteBtn');
+const categoryFilterInput = document.getElementById('categoryFilter');
+const categoryList = document.getElementById('categoryList');
 
 newQuoteTextInput.type = 'text';
 newQuoteTextInput.placeholder = 'Enter a new quote';
@@ -17,12 +19,16 @@ addQuoteForm.appendChild(addQuoteBtn);
 quoteDisplay.appendChild(addQuoteForm);
 
 
-let quotes = [];
+let quotes = [
+  "The early bird catches the worm", "You reap what you sow"
+];
+let categories = [];
 
 function loadQuotesFromStorage() {
   const storedQuotes = localStorage.getItem('quotes');
   if (storedQuotes) {
     quotes = JSON.parse(storedQuotes);
+    populateCategories();
   }
 }
 
@@ -56,6 +62,30 @@ function addQuote() {
     alert('Please enter both quote text and category.');
   }
 }
+
+function populateCategories() {
+  categories = quotes.map(quote => quote.category).filter((category, index, arr) => arr.indexOf(category) === index);
+  categoryList.innerHTML = '';
+  categories.forEach(category => {
+    const categoryOption = document.createElement('option');
+    categoryOption.value = category;
+    categoryOption.textContent = category;
+    categoryList.appendChild(categoryOption);
+  });
+}
+function filterQuotesByCategory(selectedCategory) {
+  if (selectedCategory === 'All') {
+    showRandomQuote();
+  } else {
+    const filteredQuotes = quotes.filter(quote => quote.category === selectedCategory);
+    if (filteredQuotes.length > 0) {
+      showRandomQuote(filteredQuotes);
+    } else {
+      alert('No quotes found for that category.');
+    }
+  }
+}
+
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
@@ -71,7 +101,8 @@ function importFromJsonFile(event) {
 newQuoteButton.addEventListener('click', showRandomQuote);
 addQuoteBtn.addEventListener('click', addQuote);
 importFile.addEventListener('change', importFromJsonFile);
+categoryFilterInput.addEventListener('change', () => filterQuotesByCategory(categoryFilterInput.value));
 
 loadQuotesFromStorage();
 showRandomQuote();
-
+populateCategories();
