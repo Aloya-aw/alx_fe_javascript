@@ -17,11 +17,18 @@ addQuoteForm.appendChild(addQuoteBtn);
 quoteDisplay.appendChild(addQuoteForm);
 
 
-let quotes = [
-  { text: 'The only way to do great work is to love what you do.', category: 'Inspiration' },
-  { text: 'Life is what happens while you\'re busy making other plans.', category: 'Humor' },
-  // Add more quotes here
-];
+let quotes = [];
+
+function loadQuotesFromStorage() {
+  const storedQuotes = localStorage.getItem('quotes');
+  if (storedQuotes) {
+    quotes = JSON.parse(storedQuotes);
+  }
+}
+
+function saveQuotesToStorage() {
+  localStorage.setItem('quotes', JSON.stringify(quotes));
+}
 
 function showRandomQuote() {
   const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -49,9 +56,22 @@ function addQuote() {
     alert('Please enter both quote text and category.');
   }
 }
-
+function importFromJsonFile(event) {
+  const fileReader = new FileReader();
+  fileReader.onload = function(event) {
+    const importedQuotes = JSON.parse(event.target.result);
+    quotes.push(...importedQuotes);
+    saveQuotesToStorage();
+    alert('Quotes imported successfully!');
+    showRandomQuote(); // Update displayed quote after import
+  };
+  fileReader.readAsText(event.target.files[0]);
+}
 
 newQuoteButton.addEventListener('click', showRandomQuote);
 addQuoteBtn.addEventListener('click', addQuote);
+importFile.addEventListener('change', importFromJsonFile);
 
+loadQuotesFromStorage();
+showRandomQuote();
 
