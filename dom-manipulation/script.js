@@ -112,8 +112,7 @@ function syncQuotesToServer() {
     console.error('Error syncing quotes:', error);
   });
 
-  // Periodically fetch quotes from the server
-setInterval(() => {
+function fetchQuotesFromServer() {
   fetch(serverUrl)
   .then(response => response.json())
   .then(serverQuotes => {
@@ -127,7 +126,11 @@ setInterval(() => {
   .catch(error => {
     console.error('Error fetching quotes:', error);
   });
-}, 5000); // Adjust the interval as needed
+}
+
+// Periodically fetch quotes from the server
+setInterval(fetchQuotesFromServer, 5000); // Adjust the interval as needed
+  
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
