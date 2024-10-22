@@ -91,41 +91,43 @@ function filterQuotesByCategory(selectedCategory) {
   }
 }
 
-function syncQuotesToServer() {
-  fetch(serverUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(quotes)
-  })
-  .then(response => response.json())
-  .then(serverQuotes => {
-    // Handle potential conflicts
-    if (serverQuotes.length !== quotes.length) {
-      alert('Conflict detected! Server data may have changed. Updating local quotes.');
-      quotes = serverQuotes;
-      saveQuotesToStorage();
-    }
-  })
-  .catch(error => {
-    console.error('Error syncing quotes:', error);
-  });
+async function syncQuotesToServer() {
+  try {
+    const response = await fetch(serverUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(quotes)
+    });
 
-function fetchQuotesFromServer() {
-  fetch(serverUrl)
-  .then(response => response.json())
-  .then(serverQuotes => {
+    const serverQuotes = await response.json();
+
     // Handle potential conflicts
     if (serverQuotes.length !== quotes.length) {
       alert('Conflict detected! Server data may have changed. Updating local quotes.');
       quotes = serverQuotes;
       saveQuotesToStorage();
     }
-  })
-  .catch(error => {
+  } catch (error) {
+    console.error('Error syncing quotes:', error);
+  }
+}
+
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(serverUrl);
+    const serverQuotes = await response.json();
+
+    // Handle potential conflicts
+    if (serverQuotes.length !== quotes.length) {
+      alert('Conflict detected! Server data may have changed. Updating local quotes.');
+      quotes = serverQuotes;
+      saveQuotesToStorage();
+    }
+  } catch (error) {
     console.error('Error fetching quotes:', error);
-  });
+  }
 }
 
 // Periodically fetch quotes from the server
