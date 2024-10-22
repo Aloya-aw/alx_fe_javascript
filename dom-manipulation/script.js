@@ -109,6 +109,9 @@ async function syncQuotesToServer() {
       quotes = serverQuotes;
       saveQuotesToStorage();
     }
+    else {
+      alert("Quotes synced with server!");
+    }
   } catch (error) {
     console.error('Error syncing quotes:', error);
   }
