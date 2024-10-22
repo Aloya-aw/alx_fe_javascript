@@ -24,6 +24,9 @@ let quotes = [
 ];
 let categories = [];
 
+// Simulate server data (replace with actual server API)
+const serverUrl = 'https://jsonplaceholder.typicode.com/posts';
+
 function loadQuotesFromStorage() {
   const storedQuotes = localStorage.getItem('quotes');
   if (storedQuotes) {
@@ -57,7 +60,9 @@ function addQuote() {
     const newQuoteListItem = document.createElement('li');
     newQuoteListItem.textContent = `${newQuoteText} - ${newQuoteCategory}`;
     quoteDisplay.appendChild(newQuoteListItem);
+    saveQuotesToStorage();
     showRandomQuote();
+    syncQuotesToServer();
   } else {
     alert('Please enter both quote text and category.');
   }
@@ -86,6 +91,43 @@ function filterQuotesByCategory(selectedCategory) {
   }
 }
 
+function syncQuotesToServer() {
+  fetch(serverUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(quotes)
+  })
+  .then(response => response.json())
+  .then(serverQuotes => {
+    // Handle potential conflicts
+    if (serverQuotes.length !== quotes.length) {
+      alert('Conflict detected! Server data may have changed. Updating local quotes.');
+      quotes = serverQuotes;
+      saveQuotesToStorage();
+    }
+  })
+  .catch(error => {
+    console.error('Error syncing quotes:', error);
+  });
+
+  // Periodically fetch quotes from the server
+setInterval(() => {
+  fetch(serverUrl)
+  .then(response => response.json())
+  .then(serverQuotes => {
+    // Handle potential conflicts
+    if (serverQuotes.length !== quotes.length) {
+      alert('Conflict detected! Server data may have changed. Updating local quotes.');
+      quotes = serverQuotes;
+      saveQuotesToStorage();
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching quotes:', error);
+  });
+}, 5000); // Adjust the interval as needed
 function importFromJsonFile(event) {
   const fileReader = new FileReader();
   fileReader.onload = function(event) {
