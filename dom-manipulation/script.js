@@ -27,6 +27,32 @@ let categories = [];
 // Simulate server data (replace with actual server API)
 const serverUrl = 'https://jsonplaceholder.typicode.com/posts';
 
+//Import JSON
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+  }
+
+//EXPORT
+document.getElementById('exportButton').addEventListener('click', exportToJsonFile);
+function exportToJsonFile() {
+  const jsonData = JSON.stringify(quotes, null, 2);
+  const blob = new Blob([jsonData], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download   
+ = 'quotes.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function loadQuotesFromStorage() {
   const storedQuotes = localStorage.getItem('quotes');
   if (storedQuotes) {
