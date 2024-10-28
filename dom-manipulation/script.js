@@ -6,19 +6,16 @@ const newQuoteCategoryInput = document.getElementById('newQuoteCategory');
 const addQuoteBtn = document.getElementById('addQuoteBtn');
 const categoryFilterInput = document.getElementById('categoryFilter');
 const categoryList = document.getElementById('categoryList');
-const exportButton = document.createElement('button');
 
 newQuoteTextInput.type = 'text';
 newQuoteTextInput.placeholder = 'Enter a new quote';
 newQuoteCategoryInput.type = 'text';
 newQuoteCategoryInput.placeholder = 'Enter quote category';
 addQuoteBtn.textContent = 'Add Quote';
-exportButton.textContent = 'Export Quotes';
 
 addQuoteForm.appendChild(newQuoteTextInput);
 addQuoteForm.appendChild(newQuoteCategoryInput);
 addQuoteForm.appendChild(addQuoteBtn);
-quoteDisplay.appendChild(exportButton);
 quoteDisplay.appendChild(addQuoteForm);
 
 
