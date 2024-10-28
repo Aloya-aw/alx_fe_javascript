@@ -47,8 +47,7 @@ function exportToJsonFile() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download   
- = 'quotes.json';
+  a.download = 'quotes.json';
   a.click();
   URL.revokeObjectURL(url);
 }
